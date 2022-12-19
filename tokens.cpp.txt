@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+#include <algorithm>
+
+#include <iostream>
+#include <fstream>
+#include <cctype>
+
+#include <stdio.h>
+#include <ctype.h>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+
+string invalidCharToken() { return "INVALIDCHAR_TOKEN"; }
+string endOfFunctionToken() { return "EOF_TOKEN"; }
+
+
+string opUndDelimTokens(vector<char> new_chars) {
+    string s;
+    for (auto i = new_chars.begin(); i != new_chars.end(); ++i) { s+= *i; }
+    // OPERATORS ----------------------------------------- //
+    if (s.compare("==") == 0) { return "EQUALITY_TOKEN"; }
+    if (s.compare("!=") == 0) { return "NOTEQUAL_TOKEN"; }
+    if (s.compare(":=") == 0) { return "SETEQUALTO_TOKEN"; }
+    if (s.compare("=") == 0) { return "EQUAL_TOKEN"; }
+    if (s.compare(">") == 0) { return "GTHAN_TOKEN"; }
+    if (s.compare("<") == 0) { return "LTHAN_TOKEN"; }
+    
+    if (s.compare("||") == 0) { return "OR_TOKEN"; }
+    if (s.compare("&&") == 0) { return "AND_TOKEN"; }
+    
+    if (s.compare("^") == 0) { return "CARET_TOKEN"; }
+    if (s.compare("*") == 0) { return "MULTIPLY_TOKEN"; }
+    if (s.compare("/") == 0) { return "FORWARDSLASH_TOKEN"; }
+    if (s.compare("+") == 0) { return "ADDITION_TOKEN"; }
+    if (s.compare("-") == 0) { return "SUBTRACT_TOKEN"; }
+    // --------------------------------------------------- //
+    // DELIMITERS ---------------------------------------- //
+    if (s.compare("(") == 0) { return "LPAREN_TOKEN"; }
+    if (s.compare(")") == 0) { return "RPAREN_TOKEN"; }
+    if (s.compare("[") == 0) { return "LBRACKT_TOKEN"; }
+    if (s.compare("]") == 0) { return "RBRACKT_TOKEN"; }
+    if (s.compare("{") == 0) { return "LCBRACE_TOKEN"; }
+    if (s.compare("}") == 0) { return "RCBRACE_TOKEN"; }
+
+    if (s.compare(";") == 0) { return "SEMICOL_TOKEN"; }
+    if (s.compare(":") == 0) { return "COLON_TOKEN"; }
+    if (s.compare(",") == 0) { return "COMMA_TOKEN"; }
+    if (s.compare(".") == 0) { return "PERIOD_TOKEN"; }
+    // --------------------------------------------------- //
+    return "INVALID_CHAR";
+}
+
+string keywordTokens(vector<char> new_chars) {
+    vector<char> lowered_chars;
+    for (auto i = new_chars.begin(); i != new_chars.end(); ++i) { lowered_chars.push_back(tolower(*i));}
+    
+    string s;
+    for (auto i = lowered_chars.begin(); i != lowered_chars.end(); ++i) { s+= *i; }
+    // CHECKED FOR IN CASE 3 --------------------------------- //
+    if (s.compare("begin") == 0) { return "BEGIN_TOKEN"; }
+    if (s.compare("end") == 0) { return "END_TOKEN"; }
+    if (s.compare("do") == 0) { return "DO_TOKEN"; }
+    if (s.compare("while") == 0) { return "WHILE_TOKEN"; }
+    if (s.compare("whole") == 0) { return "WHOLE_TOKEN"; }
+    if (s.compare("label") == 0) { return "LABEL_TOKEN"; }
+    if (s.compare("return") == 0) { return "RETURN_TOKEN"; }
+    if (s.compare("input") == 0) { return "INPUT_TOKEN"; }
+    if (s.compare("output") == 0) { return "OUTPUT_TOKEN"; }
+    if (s.compare("program") == 0) { return "PROGRAM_TOKEN"; }
+    if (s.compare("warp") == 0) { return "WARP_TOKEN"; }
+    if (s.compare("if") == 0) { return "IF_TOKEN"; }
+    if (s.compare("then") == 0) { return "THEN_TOKEN"; }
+    if (s.compare("pick") == 0) { return "PICK_TOKEN"; }
+    if (s.compare("declare") == 0) { return "DECLARE_TOKEN"; }
+    if (s.compare("assign") == 0) { return "ASSIGN_TOKEN"; }
+    if (s.compare("func") == 0) { return "FUNC_TOKEN"; }
+    // TOKENS REFERENCED AS STATE 6 FOR SCANNER -------------- //
+    return "NOT_KEYWORD";
+}
+
+string identifierToken() { return "IDENTIFIER_TOKEN"; }
+string digitToken() { return "DIGIT_TOKEN"; }

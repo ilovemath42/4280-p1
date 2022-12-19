@@ -1,0 +1,8 @@
+#include <vector>
+#include <string>
+std::string invalidCharToken();
+std::string endOfFunctionToken();
+std::string opUndDelimTokens(std::vector<char> new_chars);
+std::string keywordTokens(std::vector<char> new_chars);
+std::string identifierToken();
+std::string digitToken();

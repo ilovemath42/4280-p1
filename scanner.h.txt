@@ -1,0 +1,6 @@
+#include <vector>
+#include <string>
+#include <tuple>
+
+std::tuple<std::string, std::string, std::string> testScanner(std::vector<char> new_chars, int l_num, int c_num, int state);
+void aufhoren_dieScanner(std::vector<char> new_chars, int l_num, int c_num, int state);

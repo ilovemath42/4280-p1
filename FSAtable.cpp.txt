@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+#include <algorithm>
+
+#include <iostream>
+#include <fstream>
+#include <cctype>
+
+#include <stdio.h>
+#include <ctype.h>
+#include <vector>
+#include <string>
+
+
+using namespace std;
+
+
+bool state_1(char c) {
+    // state 1 is for all single operators + delims; all of these don't have a
+    // second state, so FINAL. No other processing needed: go next char
+    if ( c == '(' || c == ')' || c == ';' || c == '>' || c == '*' || c == '+' ||
+         c == '[' || c == ']' || c == ',' || c == '<' || c == '/' || c == '-' || 
+         c == '{' || c == '}' || c == '.' || c == '^' ) { return true; }
+
+    // if statement is used to catch spaces that aren't an initial character
+    // For example, with this statement, input, "a8-" will be understood as:
+    // "ID:a8; OP:-". If add space after a, it will be: "ID:a; D:8; OP:-"
+    if ( isspace(c) ) { return true; } 
+    // all other operators and delimiters appear in state_2 below
+    return false;
+}
+
+bool state_2(char c) {
+    // state 2 operator and dilimiters have 2 possible final states
+    // (except for a stray '!' char )
+    if ( c == '!' || c == ':' || c == '=' || c == '&' ||
+         c == '|' ) { return true; } // operators
+    return false;
+}
+
+bool state_3(char c) {
+    // digits are not included in this state because they cannot be used to start
+    // an identifier; because, isdigit() is used in a later state to signal
+    // start of a digit, so if it were included here, it would be a NDFSA.
+    if ( isalpha(c) || c == '_' ) { return true; } // identifiers + keywords
+    // the driver determines if an ID is a keyword; state 3 catches both
+    return false;
+}
+
+bool state_4(char c) {
+    // isdigit() is reserved to signal digits since 
+    if ( isdigit(c) ) { return true; } // digits
+    // done checking bc only ints allowed
+    return false;
+}
+
+int FSA_table(char c) {
+    int state = -1;
+    // ---------------------------------------------------------------------- //
+    
+    if ( state_1(c) ) { state = 1; } // this will represent final state
+    if ( state_2(c) ) { state = 2; } // double OP
+    if ( state_3(c) ) { state = 3; } // identifiers + starting keywords
+    if ( state_4(c) ) { state = 4; } // digits
+    // state 5 is dedicated to the scanner to assist in recognizing tokens
+    
+    // ---------------------------------------------------------------------- //
+    
+    // anything that doesn't exsist in a state is returned as an error
+    return state;
+}
+
+

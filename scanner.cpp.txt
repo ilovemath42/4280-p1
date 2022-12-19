@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+#include <algorithm>
+#include <iostream>
+
+#include <cctype>
+#include <stdio.h>
+#include <ctype.h>
+
+#include <vector>
+#include <string>
+
+#include "FSAtable.h"
+#include "tokens.h"
+
+using namespace std;
+
+// This is the scanner function that returns token information in tuples
+tuple<string, string, string> testScanner(vector<char> new_chars, int l_num, int c_num, int state) {
+    // instantilizating all the variables to store the triplet of information and setting location
+    string location = "LINE #: " + to_string(l_num) + " CHAR #: " + to_string(c_num);
+    string token_ID, instance;
+    
+    // converting the character instance into a string to return in tuple
+    for (auto i = new_chars.begin(); i != new_chars.end(); ++i) { instance += *i; }
+    
+    // ---------------------------------------------------------------------- //
+    // finding the tokens associated with the instance state given by driver
+    
+    if ( state == -2 ) { token_ID = endOfFunctionToken(); }
+    if ( state == -1 ) { token_ID = invalidCharToken(); }
+    if ( state == 1 || state == 2 ) { token_ID = opUndDelimTokens(new_chars); }
+    if ( state == 3 ) { token_ID = identifierToken(); }
+    if ( state == 4 ) { token_ID = digitToken(); }
+    if ( state == 5 ) { token_ID = keywordTokens(new_chars); }
+    
+    // ---------------------------------------------------------------------- //
+    
+    // packing values to return a tuple
+    return make_tuple(token_ID, instance, location);             
+}
+
+
+void aufhoren_dieScanner(vector<char> new_chars, int l_num, int c_num, int state) {
+    // instantilizating variables to get from scanner 
+    string token_ID, instance, location;
+            
+    tie(token_ID, instance, location) = testScanner(new_chars, l_num, c_num, state);
+    cout << token_ID << " " << instance << " " << location << endl;
+}
+
+
+
+

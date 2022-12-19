@@ -1,0 +1,148 @@
+#include <bits/stdc++.h>
+#include <algorithm>
+
+#include <iostream>
+#include <fstream>
+#include <cctype>
+
+#include <stdio.h>
+#include <ctype.h>
+#include <vector>
+#include <string>
+
+#include "driver.h"
+#include "parser.h"
+
+using namespace std; // i like using this sue me
+
+
+void comment_destroyer(string file_name) {
+    // after reading whatever input the user gives, the invocations call this
+    // function. The goal of this function is to create a commentless vector
+    // of <string> to read from with the driver.
+    fstream user_file(file_name);
+    
+    vector<string> file_txt;
+    string file_line;
+    
+    // ---------------------------------------------------------------------- //
+    // makes sure file can open, then store input in vec<string> for processing
+    if ( user_file.is_open() ) {
+        // store fstrem -> string -> vector (string)
+        while (getline(user_file, file_line)) { file_txt.push_back(file_line); }
+    }
+    else {
+        string ERROR_MSG = "ERROR: Could not open the file: ";
+        cout << ERROR_MSG << "'" << file_name << "'" << endl;
+        exit ( EXIT_FAILURE );
+    }
+    // ---------------------------------------------------------------------- //
+    string s;
+    
+    //making a string of the entire file to delete comments more accurately 
+    for ( auto i = file_txt.begin(); i != file_txt.end(); ++i) {  s += *i; s += '\n'; }
+    
+    // CONVERT STRING - > CHAR ARRAY ------ //
+    int length = s.length();
+    char c_array[length + 1];
+    
+    strcpy(c_array, s.c_str()); 
+    // ----------------------------------- //
+    
+    // storing characters not in comment in vec<char>; will - > string later
+    vector<char> new_chars;
+    int x = 0;
+    int l_num = 1; // for error msg (only this func in scope)
+    
+    for ( x; x < sizeof(c_array); x++ ) {
+        char c = c_array[x];
+        if ( c == '#' ) {
+            x++; // skip opening comment's index
+            while (c_array[x] != '#') { x++; 
+                // x should never be greater than c array; therefore, this
+                // indicates an error: a comment was left open, say what l.
+                
+                if ( c == '\n' ) { l_num++; } // tracking line
+                
+                if ( x > sizeof(c_array) ) {
+                    string ERROR_MSG = "ERROR: comment was left open on line: ";
+                    cout << ERROR_MSG << l_num << endl;
+                    exit ( EXIT_FAILURE );
+                }
+                // since the for loop has x++ we just need to set x to the closing
+                // comment's index, then for loop will start x++ (after closing #)
+            }
+        }
+        else {
+            if ( c == '\n' ) { l_num++; }
+            // all comments are caught by if statement, so push back non-comment c
+            new_chars.push_back(c);
+        }
+
+    }
+    // generating new text from char vector
+    vector<string> new_txt;
+    string line_txt; // temp var that gets stored and then cleared for next input
+    for (auto i = new_chars.begin(); i != new_chars.end(); ++i) { 
+        // if statement catches a newline, then push back string -> vector
+        if ( *i == '\n') { 
+            new_txt.push_back(line_txt);
+            line_txt.clear();
+        } 
+        line_txt += *i; 
+        
+    }
+    
+    // the commentless text is sent to the driver to be evaluated
+    FA_driver(new_txt);
+}
+
+
+
+void getting_stdin() {
+    // function stores user input as a file
+    string file_name = "user_input.txt";
+    fstream file;
+    
+    file.open (file_name, ios::out);
+    // will take in user input up to specified line amount
+    int line_amount;
+    string input;
+
+    cout << "How many lines of code do you wish to type out?\n";
+    cout << "   - note: blank lines will count as lines -   \n";
+    cout << "Your response: ";
+    cin >> line_amount;
+    
+    cout << "\nPlease type your input below:" << endl;
+    cout << endl;
+    do {
+      // blank lines are counted
+      getline (cin, input);
+      file << input;
+    } while(line_amount--);
+    
+    // closing the temp file after writing to it
+    file.close();
+    
+    comment_destroyer(file_name);
+}
+
+
+
+int main(int argc, char **argv) {
+    // if only the scanner is called get input from the user
+    if(argc == 1) { getting_stdin(); }
+    else {
+        // else use the file the user specified
+        string file_name = argv[1];
+        comment_destroyer(file_name);
+    }
+    
+    
+    
+    // added for readability in PuTTy
+    cout << endl; 
+    
+    return 0;
+}
