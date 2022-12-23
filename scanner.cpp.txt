@@ -1,13 +1,13 @@
-#include <bits/stdc++.h>
 #include <algorithm>
 #include <iostream>
-
-#include <cctype>
 #include <stdio.h>
 #include <ctype.h>
+#include <cstring>
+#include <cctype>
 
 #include <vector>
 #include <string>
+#include <tuple>
 
 #include "FSAtable.h"
 #include "tokens.h"
