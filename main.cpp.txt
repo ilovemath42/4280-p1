@@ -1,12 +1,11 @@
-#include <bits/stdc++.h>
 #include <algorithm>
-
 #include <iostream>
 #include <fstream>
-#include <cctype>
-
 #include <stdio.h>
 #include <ctype.h>
+#include <cstring>
+#include <cctype>
+
 #include <vector>
 #include <string>
 
