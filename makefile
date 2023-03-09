@@ -1,17 +1,18 @@
-scanner: main.o scanner.o FSA_table.o tokens.o driver.o
-	g++ -o scanner main.o scanner.o FSA_table.o tokens.o driver.o
+P1: main.o scanner.o FSAT.o testScanner.o tokens.o
+	g++ -o P1 main.o scanner.o FSAT.o testScanner.o tokens.o
 
-main.o: main.cpp driver.h
+main.o: main.cpp testScanner.h
 	g++ -c main.cpp
 
-driver.o: driver.cpp scanner.h 
-	g++ -c driver.cpp 
+testScanner.o: testScanner.cpp scanner.h FSAT.h token.h
+	g++ -c testScanner.cpp
 
-scanner.o: scanner.cpp FSA_table.h tokens.h
-	g++ -c scanner.cpp 
+scanner.o: scanner.cpp tokens.h token.h
+	g++ -c scanner.cpp token.h
 
-FSA_table.o: FSA_table.cpp
-	g++ -c FSA_table.cpp
+FSAT.o: FSAT.cpp
+	g++ -c FSAT.cpp
 
 tokens.o: tokens.cpp
 	g++ -c tokens.cpp
+
